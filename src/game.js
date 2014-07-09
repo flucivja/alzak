@@ -14,11 +14,11 @@
 
     function preload() {
         
-        game.load.image('alzak', '/img/alzak_min.png');
-        game.load.image('guncross', '/img/gun_cross_min.png');
-        game.load.image('shotgun', '/img/shotgun_min.png');
-        game.load.image('blood', '/img/blood_min.png');
-        
+        game.load.image('alzak', 'img/alzak_min.png');
+        game.load.image('guncross', 'img/gun_cross_min.png');
+        game.load.image('shotgun', 'img/shotgun_min.png');
+        game.load.image('blood', 'img/blood_min.png');
+    
     }
 
     function create() {
