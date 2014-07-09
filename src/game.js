@@ -13,20 +13,12 @@
     var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
     function preload() {
-        
-<<<<<<< HEAD
+
         game.load.image('alzak', 'img/alzak_min.png');
         game.load.image('guncross', 'img/gun_cross_min.png');
         game.load.image('shotgun', 'img/shotgun_min.png');
         game.load.image('blood', 'img/blood_min.png');
     
-=======
-        game.load.image('alzak', '/img/alzak_min.png');
-        game.load.image('guncross', '/img/gun_cross_min.png');
-        game.load.image('shotgun', '/img/shotgun_min.png');
-        game.load.image('blood', '/img/blood_min.png');
-        
->>>>>>> master
     }
 
     function create() {
