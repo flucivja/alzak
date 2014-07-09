@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         separator: '\n'
       },
       dist: {
-        src: ['libs/*.js', 'src/*.js'],
+        src: ['libs/*.js', 'src/game.js', 'src/assets/*.js'],
         dest: 'build/js/app.js'
       }
     },
@@ -58,7 +58,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: ['src/**/*.js', 'css/**/*.less', 'index.html'],
+        files: ['src/**/*.js', 'css/**/*.less', 'index.html', 'Gruntfile.js'],
         tasks: ['jshint', 'concat', 'less:dev'],
         options: {
           spawn: false,
