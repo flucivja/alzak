@@ -22,6 +22,8 @@
         	scene.physics.arcade.enable(guncross);
 
         	scene.input.onDown.add(shoot, window);  
+
+        	this.shape = guncross;
 		},
 
 		update: function() {
@@ -36,8 +38,7 @@
         var alzakObject = game.assets.alzak,
         	alzak = alzakObject.shape,
         	alzakWidth = alzak.texture.width,
-            alzakHeight = alzak.texture.height,
-            playerHeight = player.texture.height;
+            alzakHeight = alzak.texture.height;
 
         if(pointer.x > alzak.position.x && pointer.x <  alzak.position.x + alzakWidth && pointer.y > alzak.position.y && pointer.y <  alzak.position.y + alzakHeight) {
             alzakObject.kill();

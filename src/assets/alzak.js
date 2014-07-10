@@ -4,7 +4,8 @@
 
 	var alzak,
 		blood,
-		scene = game.scene;
+		scene = game.scene,
+		shouldChangePos = true;
 
 	game.create('alzak', {
 
@@ -21,26 +22,7 @@
 		},
 
 		update: function() {
-			if(this.timeout === undefined) {
-	            move();
-	            this.timeout = setTimeout(function() {
-	                move();
-	                clearTimeout(this.timeout);
-	                this.timeout = undefined;
-	            }, 500);
-	        }        
-
-	        if(alzak.position.x > scene.world.width - alzak.texture.width) {
-	            alzak.body.velocity.x = -game.config.speed;
-	        } else if(alzak.position.x < 0) {
-	            alzak.body.velocity.x = game.config.speed;
-	        }
-
-	        if(alzak.position.y > scene.world.height - alzak.texture.height) {
-	            alzak.body.velocity.y = -game.config.speed;
-	        } else if(alzak.position.y < 0) {
-	            alzak.body.velocity.y = game.config.speed;
-	        } 
+			//move();
 		},
 
 		kill: function() {
@@ -76,12 +58,49 @@
 
 	});
 
-	function move() {
+	function changeDirection() {
         var rand;
         rand = Math.floor(Math.random() * 1000);
         alzak.body.velocity.y = rand > 500 ? game.config.speed : - game.config.speed;
         rand = Math.floor(Math.random() * 1000);
         alzak.body.velocity.x = rand > 500 ? game.config.speed : - game.config.speed;
+    }
+
+    function move() {
+    	var playerPosition = game.assets.player.shape.position,
+			self = game.assets.alzak;
+
+		if(self.timeout === undefined) {
+            changeDirection();
+            self.timeout = setTimeout(function() {
+                changeDirection();
+                clearTimeout(self.timeout);
+                self.timeout = undefined;
+            }, 1500);
+        }
+
+        if(playerPosition.x > alzak.position.x && playerPosition.x <  alzak.position.x + alzak.texture.width && playerPosition.y > alzak.position.y && playerPosition.y <  alzak.position.y + alzak.texture.height) {
+        	if(shouldChangePos) {
+        		setTimeout(function() {
+        			changeDirection();
+        		}, 200);	        		
+        		shouldChangePos = false;
+        	}
+        } else {
+        	shouldChangePos = true;
+        }
+
+        if(alzak.position.x > scene.world.width - alzak.texture.width) {
+            alzak.body.velocity.x = -game.config.speed;
+        } else if(alzak.position.x < 0) {
+            alzak.body.velocity.x = game.config.speed;
+        }
+
+        if(alzak.position.y > scene.world.height - alzak.texture.height) {
+            alzak.body.velocity.y = -game.config.speed;
+        } else if(alzak.position.y < 0) {
+            alzak.body.velocity.y = game.config.speed;
+        } 
     }
 
 }(window.game || {}));
