@@ -1,106 +1,108 @@
-(function(game) {
+(function(window, app, Phaser) {
 
-	'use strict';
+    'use strict';
 
-	var alzak,
-		blood,
-		scene = game.scene,
-		shouldChangePos = true;
+    var alzak,
+        blood,
+        game = app.game,
+        baseLayer,
+        shouldChangePos = true;
 
-	game.create('alzak', {
+    app.createAsset('alzak', {
 
-		preload: function() {
-			scene.load.image('alzak', 'img/alzak_min.png');
-			scene.load.image('blood', 'img/blood_min.png');
-		},
+        preload: function() {
+            game.load.image('alzak', 'img/alzak_min.png');
+            game.load.image('blood', 'img/blood_min.png');
+        },
 
-		create: function() {
-			alzak = scene.add.sprite(scene.world.centerX, scene.world.centerY, 'alzak');
-        	scene.physics.arcade.enable(alzak);
+        create: function() {
+            baseLayer = app.layer('baseLayer', 0);
+            
+            alzak = new Phaser.Sprite(game, game.world.centerX, game.world.centerY, 'alzak');
+            game.physics.arcade.enable(alzak);
+            baseLayer.add(alzak);
+            this.shape = alzak;
+        },
 
-        	this.shape = alzak;
-		},
+        update: function() {
+            move();
+        },
 
-		update: function() {
-			//move();
-		},
+        kill: function() {
+            app.assets.hud.increaseScore();
+            alzak.kill();
 
-		kill: function() {
-			game.assets.hud.increaseScore();
-			alzak.kill();
-
-			var newX = scene.world.randomX, 
-                newY = scene.world.randomY,
+            var newX = game.world.randomX, 
+                newY = game.world.randomY,
                 alzakWidth = alzak.texture.width,
-            	alzakHeight = alzak.texture.height;
+                alzakHeight = alzak.texture.height;
 
-            if(newX > scene.world.width - alzakWidth) {
-                newX = scene.world.width - alzakWidth;
+            if(newX > game.world.width - alzakWidth) {
+                newX = game.world.width - alzakWidth;
             } else if(newX < 0) {
                 newX = 0;
             }
-            
-            if(newY > scene.world.height - alzakHeight) {
-                newY = scene.world.height - alzakHeight;
+
+            if(newY > game.world.height - alzakHeight) {
+                newY = game.world.height - alzakHeight;
             } else if(newY < 0) {
                 newY = 0;
             }
-            
-            blood = scene.add.sprite(alzak.position.x, alzak.position.y, 'blood');
+
+            blood = new Phaser.Sprite(game, alzak.position.x, alzak.position.y, 'blood');
+            baseLayer.add(blood);
             blood.lifespan = 2000;
             alzak.reset(newX, newY);
             alzak.bringToTop();
             if(this.timeout !== undefined) {
-                clearTimeout(this.timeout);
+                window.clearTimeout(this.timeout);
                 this.timeout = undefined;
             }
-		}
+        }
 
-	});
+    });
 
-	function changeDirection() {
+    function changeDirection() {
         var rand;
         rand = Math.floor(Math.random() * 1000);
-        alzak.body.velocity.y = rand > 500 ? game.config.speed : - game.config.speed;
+        alzak.body.velocity.y = rand > 500 ? app.config.speed : - app.config.speed;
         rand = Math.floor(Math.random() * 1000);
-        alzak.body.velocity.x = rand > 500 ? game.config.speed : - game.config.speed;
+        alzak.body.velocity.x = rand > 500 ? app.config.speed : - app.config.speed;
     }
 
     function move() {
-    	var playerPosition = game.assets.player.shape.position,
-			self = game.assets.alzak;
+        var playerPosition = app.assets.player.shape.position,
+            self = app.assets.alzak;
 
-		if(self.timeout === undefined) {
+        if(self.timeout === undefined) {
             changeDirection();
-            self.timeout = setTimeout(function() {
+            self.timeout = window.setTimeout(function() {
                 changeDirection();
-                clearTimeout(self.timeout);
+                window.clearTimeout(self.timeout);
                 self.timeout = undefined;
             }, 1500);
         }
 
         if(playerPosition.x > alzak.position.x && playerPosition.x <  alzak.position.x + alzak.texture.width && playerPosition.y > alzak.position.y && playerPosition.y <  alzak.position.y + alzak.texture.height) {
-        	if(shouldChangePos) {
-        		setTimeout(function() {
-        			changeDirection();
-        		}, 200);	        		
-        		shouldChangePos = false;
-        	}
+            if(shouldChangePos) {
+                window.setTimeout(changeDirection, 200);
+                shouldChangePos = false;
+            }
         } else {
-        	shouldChangePos = true;
+            shouldChangePos = true;
         }
 
-        if(alzak.position.x > scene.world.width - alzak.texture.width) {
-            alzak.body.velocity.x = -game.config.speed;
+        if(alzak.position.x > game.world.width - alzak.texture.width) {
+            alzak.body.velocity.x = -app.config.speed;
         } else if(alzak.position.x < 0) {
-            alzak.body.velocity.x = game.config.speed;
+            alzak.body.velocity.x = app.config.speed;
         }
 
-        if(alzak.position.y > scene.world.height - alzak.texture.height) {
-            alzak.body.velocity.y = -game.config.speed;
+        if(alzak.position.y > game.world.height - alzak.texture.height) {
+            alzak.body.velocity.y = -app.config.speed;
         } else if(alzak.position.y < 0) {
-            alzak.body.velocity.y = game.config.speed;
+            alzak.body.velocity.y = app.config.speed;
         } 
     }
 
-}(window.game || {}));
+}(this, this.app || {}, this.Phaser));

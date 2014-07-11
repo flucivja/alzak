@@ -1,12 +1,12 @@
-(function(game) {
+(function(app, Phaser) {
 
 	'use strict';
 
 	var score = 0,
         scoreText,
-        scene = game.scene;
+        game = app.game;
 
-	game.create('hud', {
+	app.createAsset('hud', {
 
         increaseScore: function() {
             score += 1;
@@ -14,9 +14,12 @@
         },
 
 		create: function() {
-            scoreText = scene.add.text(16, 16, 'Score: ' + score, { fontSize: '12px', fill: '#fff' });
+            var hudLayer = app.layer('hudLayer', 99);
+            scoreText = new Phaser.Text(game, 16, 16, 'Score: ' + score, { fontSize: '8px', fill: '#000' });
+            hudLayer.add(scoreText);
+            //scoreText = game.add.text();
 		}
 
 	});
 
-}(window.game || {}));
+}(this.app || {}, this.Phaser));
