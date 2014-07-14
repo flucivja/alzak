@@ -85,7 +85,7 @@
 
         if(playerPosition.x > alzak.position.x && playerPosition.x <  alzak.position.x + alzak.texture.width && playerPosition.y > alzak.position.y && playerPosition.y <  alzak.position.y + alzak.texture.height) {
             if(shouldChangePos) {
-                window.setTimeout(changeDirection, 200);
+                window.setTimeout(changeDirection, 500);
                 shouldChangePos = false;
             }
         } else {
